@@ -9,7 +9,7 @@
             font-family: 'Segoe UI', sans-serif;
             margin: 0;
             padding: 0;
-            background: radial-gradient(circle, #0050E6, #002060); 
+            background: radial-gradient(circle, #0050E6, #002060); /* Color del menú de tu juego */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -51,17 +51,23 @@
             display: block;
             font-size: 3rem;
             font-weight: bold;
-            color: #25D366; 
+            color: #25D366; /* El verde de tus botones */
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>DESBLOQUEO EN MEDIA HORA</h1>
-        <p>¡De mientras puedes probar los demás juegos!</p>
+        <h1>ESTAMOS TRABAJANDO EN EL JUEGO</h1>
+        <p>¡de mientras puedes probar los demas juegos!</p>
         
         <div id="countdown">
+            <div class="time-box">
+                <span class="number" id="days">00</span> días
+            </div>
+            <div class="time-box">
+                <span class="number" id="hours">00</span> horas
+            </div>
             <div class="time-box">
                 <span class="number" id="minutes">00</span> min
             </div>
@@ -72,31 +78,30 @@
     </div>
 
     <script>
-        // CONFIGURACIÓN: Hoy a las 5:45 PM (17:45)
-        const targetDate = new Date();
-        targetDate.setHours(17, 45, 0, 0); 
+        // CONFIGURACIÓN: 10 de abril de 2026
+        const targetDate = new Date("April 10, 2026 00:00:00").getTime();
 
         const timer = setInterval(function() {
             const now = new Date().getTime();
-            const diff = targetDate.getTime() - now;
+            const diff = targetDate - now;
 
-            // CUANDO SE ACABA EL TIEMPO
             if (diff <= 0) {
                 clearInterval(timer);
-                document.querySelector(".container").innerHTML = "<h1>¡ABRIENDO FRUIT NINJA!</h1>";
-                
-                // Redirigir a tu archivo local de EmuOS
-                window.location.href = "FRUITNINJAORIGINAL.html"; 
+                document.querySelector(".container").innerHTML = "<h1>¡EL JUEGO YA ESTÁ DISPONIBLE!</h1>";
                 return;
             }
 
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const s = Math.floor((diff % (1000 * 60)) / 1000);
 
+            document.getElementById("days").innerText = d.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = h.toString().padStart(2, '0');
             document.getElementById("minutes").innerText = m.toString().padStart(2, '0');
             document.getElementById("seconds").innerText = s.toString().padStart(2, '0');
             
         }, 1000);
     </script>
 </body>
-</html>
+</html>										//esto es para juegos que salen mañana o en un rato :)
