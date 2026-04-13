@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>MY ULTIMATE ARCADE</title>
+    <title>MY ULTIMATE ARCADE - (DEMO)</title>
     <link rel="icon" type="image/png" href="pagesprites/FAVICON.png">
     
     <style>
@@ -12,12 +12,11 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;
         }
 
-        /* ESTILO PARA TU LOGO */
         .menu-logo {
-            max-width: 300px; /* Ajusta el tamaño aquí */
+            max-width: 300px;
             height: auto;
             margin-top: 30px;
-            filter: drop-shadow(0 0 15px #0f0); /* Esto le da el brillo neón al logo */
+            filter: drop-shadow(0 0 15px #0f0);
         }
 
         #arcade-title {
@@ -31,13 +30,25 @@
             max-width: 1200px; padding: 20px;
         }
 
+        /* TARJETA ACTUALIZADA PARA PORTADAS */
         .game-card {
             width: 220px; height: 320px; background: #111;
             border: 4px solid #333; border-radius: 15px;
-            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-            padding: 20px; cursor: pointer; transition: 0.4s;
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+            cursor: pointer; transition: 0.4s;
             position: relative; overflow: hidden;
             box-sizing: border-box;
+            background-size: cover; /* La imagen cubre todo */
+            background-position: center;
+        }
+
+        /* Efecto de sombra para que el texto resalte sobre la imagen */
+        .game-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 50%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            z-index: 1;
         }
 
         .game-card:hover {
@@ -46,15 +57,19 @@
             box-shadow: 0 0 30px var(--color);
         }
 
-        .game-icon { font-size: 50px; margin-top: 30px; }
-        .game-name { font-size: 18px; font-weight: bold; text-align: center; }
+        .game-name { 
+            font-size: 18px; font-weight: bold; text-align: center; 
+            z-index: 2; margin-bottom: 20px; text-shadow: 2px 2px 4px #000;
+        }
 
-        .snake-card { --color: #0f0; }
-        .fnf-card { --color: #ff00ff; }
-        .granny-card { --color: #f00; }
-        .wip-card { --color: #ffcc00; } 
-        .cut-the-rope-card { --color: #a3ff00; }
-        .htmlphysics-card { --color: #0088ff; }
+        /* ASIGNACIÓN DE PORTADAS */
+        .snake-card { --color: #0f0; background-image: url('pagesprites/portada_snake.jpg'); }
+        .fnf-card { --color: #ff00ff; background-image: url('pagesprites/portada_fnf.jpg'); }
+        .fruit-card { --color: #ffcc00; background-image: url('pagesprites/portada_fruit.jpg'); }
+        .death-card { --color: #f00; background-image: url('pagesprites/portada_deathcase.jpg'); } /* Tu juego Death Case */
+        .granny-card { --color: #888; background-image: url('pagesprites/portada_granny.jpg'); }
+        .cut-the-rope-card { --color: #a3ff00; background-image: url('pagesprites/portada_cut.jpg'); }
+        .htmlphysics-card { --color: #0088ff; background-image: url('pagesprites/portada_physics.jpg'); }
 
         #game-frame-container {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -69,7 +84,6 @@
             border: 2px solid #555; cursor: pointer; z-index: 110;
             font-family: 'Courier New', monospace;
         }
-        #back-btn:hover { background: #000; border-color: #fff; }
     </style>
 </head>
 <body>
@@ -80,37 +94,30 @@
 
     <div class="menu-container">
         <div class="game-card snake-card" onclick="openGame('snake.html')">
-            <div class="game-icon">🐍</div>
             <div class="game-name">SNAKE 3D<br>SMOOTH</div>
         </div>
 
         <div class="game-card fnf-card" onclick="openGame('FNFORIGINAL.html')">
-            <div class="game-icon">🎤</div>
             <div class="game-name">FRIDAY NIGHT<br>FUNKIN</div>
         </div>
         
-        <div class="game-card wip-card" onclick="openGame('FRUITNINJAORIGINAL.html')">
-            <div class="game-icon">🍉</div>
+        <div class="game-card fruit-card" onclick="openGame('FRUITNINJAORIGINAL.html')">
             <div class="game-name">FRUIT<br>NINJA</div>
         </div>
         
-        <div class="game-card wip-card" onclick="openGame('TEMPORIZADOR.html')">
-            <div class="game-icon">🕵️</div>
-            <div class="game-name">GAME.WIP<br></div>
+        <div class="game-card death-card" onclick="openGame('TEMPORIZADOR.html')">
+            <div class="game-name">DEATH CASE<br>(DEMO)</div>
         </div>
 
         <div class="game-card granny-card" onclick="openGame('grannyinfinite.html')">
-            <div class="game-icon">👵</div>
             <div class="game-name">GRANNY<br>ORIGINAL</div>
         </div>  
         
         <div class="game-card cut-the-rope-card" onclick="openGame('CUTTHEROPEORIGINAL.html')">
-            <div class="game-icon">🍬</div>
             <div class="game-name">CUT THE<br>ROPE</div>
         </div>
 
         <div class="game-card htmlphysics-card" onclick="openGame('HTMLphysics.html')">
-            <div class="game-icon">🏀</div>
             <div class="game-name">HTML<br>physics 3D</div>
         </div>
     </div>
