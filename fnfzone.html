@@ -28,7 +28,7 @@
 
         /* --- CARTAS CON IMAGEN DE FONDO --- */
         .card {
-            height: 320px; /* Un poco más altas para que luzca la imagen */
+            height: 320px;
             background-color: #111;
             background-size: cover;
             background-position: center;
@@ -36,14 +36,13 @@
             border-radius: 15px;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end; /* El texto se queda abajo */
+            justify-content: flex-end;
             cursor: pointer;
             transition: 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        /* Sombreado para que el nombre se lea bien sobre la imagen */
         .card::before {
             content: "";
             position: absolute;
@@ -68,9 +67,25 @@
         .card-info h3 { margin: 0; font-size: 18px; color: #fff; text-shadow: 2px 2px #000; }
         .card-info p { margin: 5px 0 0; font-size: 11px; color: var(--fnf-cyan); }
 
-        .back {
-            display: inline-block; margin-top: 10px; color: #fff; text-decoration: none;
-            border: 1px solid #444; padding: 5px 15px;
+        /* --- NUEVO BOTÓN PERSONALIZADO --- */
+        .back-custom {
+            display: inline-block;
+            margin-top: 10px;
+            color: #fff;
+            text-decoration: none;
+            border: 2px solid var(--fnf-magenta);
+            padding: 8px 20px;
+            background: transparent;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .back-custom:hover {
+            background: var(--fnf-magenta);
+            box-shadow: 0 0 15px var(--fnf-magenta);
+            color: black;
         }
     </style>
 </head>
@@ -78,12 +93,12 @@
 
 <header>
     <h1 style="margin:0;">🎤 FNF <span style="color:var(--fnf-magenta)">DATABASE</span></h1>
-    <a href="index.html" class="back">⬅ VOLVER AL GAMESITE</a>
+    <!-- Ahora este botón recarga tu menú actual en lugar de sacarte -->
+    <button class="back-custom" onclick="location.href='index.html'">⬅ VOLVER AL MENÚ FNF</button>
 </header>
 
 <div class="mods-grid">
 
-    <!-- MOD CON IMAGEN: Cambia 'tu_imagen.jpg' por la ruta real -->
     <div class="card" style="background-image: url('pagesprites/iridaportada.jpg');" onclick="location.href='iirida/index.html'">
         <div class="card-info">
             <h3>JEFFYS INFINITE IRIDA</h3>
@@ -112,7 +127,6 @@
         </div>
     </div>
 
-    <!-- OTRO MOD -->
     <div class="card" style="background-image: url('pagesprites/aethosportada.jpg');" onclick="location.href='aethos/index.html'">
         <div class="card-info">
             <h3>JEFFYS ENDLESS AETHOS</h3>
@@ -120,7 +134,6 @@
         </div>
     </div>
 
-    <!-- Ejemplo sin imagen todavía (fondo negro por defecto) -->
     <div class="card" style="background-image: url('pagesprites/skyportada.jpg');" onclick="location.href='skyreborn/index.html'">
         <div class="card-info">
             <h3>SKY REBORN</h3>
