@@ -17,7 +17,7 @@ Marquen sus calendarios: **15 de Abril, 2026**.
 ## 📝 Créditos
 - **Dev:** kiasks
 - **Code & Physics:** Gemini AI
-- **Ports:** codebeautify (FNF y GRANNY) y yell0wsuit (cuttherope).
+- **Ports:** codebeautify (FNF y GRANNY), yell0wsuit (cuttherope) y c1tcher (PsychEngine mods)
 - **Original Games:** ninjamuffin99 (FNF), DVloper (Granny1,2) Zeptolab (Cut The Rope) Halfbrick (Fruit Ninja,Jetpack Joyride) Paradyme Games (Solar Smash) Anna (Crazy Cattle 3D)-segun gemini. Team cherry (Hollow Knight)
 - Basically Games (Baldis basics ,Baldis basics plus) Scott Cawthon (five nights at freddys 3) Emil "Ace" Macko (five nights at candys 2) Eric Gurt. (Ragdoll Archers) KBH games (Jefys endless aethos)
 
