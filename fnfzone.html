@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>FNF ZONE | SELECCIÓN</title>
+    <title>FNF ZONE | SELECCIÓN COMPLETA</title>
     <style>
         :root {
             --fnf-cyan: #00ffff;
@@ -13,22 +13,45 @@
         body {
             margin: 0; background: var(--bg); color: white;
             font-family: 'Courier New', monospace;
+            overflow-x: hidden;
         }
 
         header {
             padding: 20px; background: #000; border-bottom: 3px solid var(--fnf-magenta);
             text-align: center;
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        /* --- BOTÓN QUE TE MANTIENE EN FNF ZONE --- */
+        .back-to-zone {
+            display: inline-block;
+            margin-top: 10px;
+            color: #fff;
+            text-decoration: none;
+            border: 2px solid var(--fnf-cyan);
+            padding: 10px 25px;
+            background: #000;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .back-to-zone:hover {
+            background: var(--fnf-cyan);
+            box-shadow: 0 0 15px var(--fnf-cyan);
+            color: black;
         }
 
         .mods-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px; padding: 40px;
         }
 
-        /* --- CARTAS CON IMAGEN DE FONDO --- */
+        /* --- ESTILO DE LAS CARTAS --- */
         .card {
-            height: 320px; /* Un poco más altas para que luzca la imagen */
+            height: 350px;
             background-color: #111;
             background-size: cover;
             background-position: center;
@@ -36,54 +59,49 @@
             border-radius: 15px;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end; /* El texto se queda abajo */
+            justify-content: flex-end;
             cursor: pointer;
             transition: 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        /* Sombreado para que el nombre se lea bien sobre la imagen */
         .card::before {
             content: "";
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(transparent 50%, rgba(0,0,0,0.9));
+            background: linear-gradient(transparent 40%, rgba(0,0,0,0.9));
             z-index: 1;
         }
 
         .card:hover {
             border-color: var(--fnf-cyan);
             transform: scale(1.05);
-            box-shadow: 0 0 25px var(--fnf-cyan);
+            box-shadow: 0 0 30px var(--fnf-cyan);
+            z-index: 10;
         }
 
         .card-info {
             position: relative;
             z-index: 2;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
         }
 
-        .card-info h3 { margin: 0; font-size: 18px; color: #fff; text-shadow: 2px 2px #000; }
-        .card-info p { margin: 5px 0 0; font-size: 11px; color: var(--fnf-cyan); }
-
-        .back {
-            display: inline-block; margin-top: 10px; color: #fff; text-decoration: none;
-            border: 1px solid #444; padding: 5px 15px;
-        }
+        .card-info h3 { margin: 0; font-size: 20px; color: #fff; text-shadow: 2px 2px #000; }
+        .card-info p { margin: 5px 0 0; font-size: 12px; color: var(--fnf-cyan); font-weight: bold; }
     </style>
 </head>
 <body>
 
 <header>
     <h1 style="margin:0;">🎤 FNF <span style="color:var(--fnf-magenta)">DATABASE</span></h1>
-    <a href="index.html" class="back">⬅ VOLVER AL GAMESITE</a>
+    <button class="back-to-zone" onclick="irAFnfZone()">⬅ VOLVER A FNF ZONE (ESC)</button>
 </header>
 
 <div class="mods-grid">
 
-    <!-- MOD CON IMAGEN: Cambia 'tu_imagen.jpg' por la ruta real -->
+    <!-- 1. IRIDA -->
     <div class="card" style="background-image: url('pagesprites/iridaportada.jpg');" onclick="location.href='iirida/index.html'">
         <div class="card-info">
             <h3>JEFFYS INFINITE IRIDA</h3>
@@ -91,28 +109,31 @@
         </div>
     </div>
     
-     <div class="card" style="background-image: url('pagesprites/stevenportada.jpg');" onclick="location.href='steven/index.html'">
+    <!-- 2. STEVEN -->
+    <div class="card" style="background-image: url('pagesprites/stevenportada.jpg');" onclick="location.href='steven/index.html'">
         <div class="card-info">
             <h3>STEVEN MINIMODPACK</h3>
             <p>OPEN MOD</p>
         </div>
     </div>
 
-     <div class="card" style="background-image: url('pagesprites/sonicportada.jpg');" onclick="location.href='sonic.exe/index.html'">
+    <!-- 3. SONIC.EXE -->
+    <div class="card" style="background-image: url('pagesprites/sonicportada.jpg');" onclick="location.href='sonic.exe/index.html'">
         <div class="card-info">
             <h3>SONIC.EXE</h3>
             <p>OPEN MOD</p>
         </div>
     </div>
 
-     <div class="card" style="background-image: url('pagesprites/poriferaportada.jpg');" onclick="location.href='porifera/index.html'">
+    <!-- 4. PORIFERA -->
+    <div class="card" style="background-image: url('pagesprites/poriferaportada.jpg');" onclick="location.href='porifera/index.html'">
         <div class="card-info">
             <h3>PORIFERA ATOLL</h3>
             <p>OPEN MOD</p>
         </div>
     </div>
 
-    <!-- OTRO MOD -->
+    <!-- 5. AETHOS -->
     <div class="card" style="background-image: url('pagesprites/aethosportada.jpg');" onclick="location.href='aethos/index.html'">
         <div class="card-info">
             <h3>JEFFYS ENDLESS AETHOS</h3>
@@ -120,15 +141,38 @@
         </div>
     </div>
 
-    <!-- Ejemplo sin imagen todavía (fondo negro por defecto) -->
+    <!-- 6. SKY REBORN -->
     <div class="card" style="background-image: url('pagesprites/skyportada.jpg');" onclick="location.href='skyreborn/index.html'">
         <div class="card-info">
             <h3>SKY REBORN</h3>
             <p>OPEN MOD</p>
         </div>
     </div>
+    
+     <div class="card" style="background-image: url('pagesprites/pibby2portada.jpg');" onclick="location.href='pibby2/index.html'">
+        <div class="card-info">
+            <h3>PIBBY APOCALYPSE</h3>
+            <p>OPEN MOD</p>
+        </div>
+    </div>
+
 
 </div>
+
+<script>
+    // Función para no salir de tu zona
+    function irAFnfZone() {
+        window.location.href = 'index.html'; 
+    }
+
+    // El truco del botón ESC para tu Lenovo
+    window.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' || event.keyCode === 27) {
+            event.preventDefault(); // Bloquea el menú de Gamesite
+            irAFnfZone();
+        }
+    });
+</script>
 
 </body>
 </html>
