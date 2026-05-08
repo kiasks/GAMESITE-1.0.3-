@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="https://cdn.jsdelivr.net/gh/waycrosspublicmedia/fnf@main/mcm/">
+    <meta charset="utf-8">
+    <title>Mistful Crimson Morning - GAMESITE PC</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+    <link rel="shortcut icon" type="image/png" href="./favicon.png">
+    
+    <script type="text/javascript" src="./mcm.js"></script>
+    
+    <script>
+        // Evitar que las flechas muevan la página en el navegador
+        window.addEventListener("keydown", function(e) {
+            if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+                e.preventDefault(); 
+            }
+        }, false);
+    </script>
+    
+    <style>
+        html, body { 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            overflow: hidden; 
+            background: #000; 
+        }
+        #openfl-content { 
+            width: 100%; 
+            height: 100%; 
+        }
+    </style>
+</head>
+<body>
+    <div id="openfl-content"></div>
+    
+    <script type="text/javascript">
+        // Inicio del motor PsychEngine sin basura de rastreo
+        lime.embed("PsychEngine", "openfl-content", 1280, 720, { parameters: {} });
+    </script>
+</body>
+</html>
