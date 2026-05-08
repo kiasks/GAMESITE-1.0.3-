@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="https://cdn.jsdelivr.net/gh/waycrosspublicmedia/fnfmods@main/pibby/">
+    <meta charset="utf-8">
+    <title>FNF vs Pibby - GAMESITE Edition</title>
+    
+    <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    <link rel="shortcut icon" type="image/png" href="./favicon.png">
+    
+    <script type="text/javascript" src="./pibby.js"></script>
+    
+    <script>
+        // Prevenir que la pantalla se mueva al tocar (útil en móviles)
+        window.addEventListener("touchmove", function (event) { 
+            event.preventDefault(); 
+        }, { capture: false, passive: false });
+
+        // Ajuste de escala según la densidad de píxeles
+        if (typeof window.devicePixelRatio != 'undefined' && window.devicePixelRatio > 2) {
+            var meta = document.getElementById("viewport");
+            meta.setAttribute('content', 'width=device-width, initial-scale=' + (2 / window.devicePixelRatio) + ', user-scalable=no');
+        }
+
+        // SOPORTE DE TECLADO: Evitar scroll con flechas y espacio
+        window.addEventListener("keydown", function(e) {
+            if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+                e.preventDefault(); 
+            }
+        }, false);
+    </script>
+    
+    <style>
+        html, body { 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            overflow: hidden; 
+            background: #000; 
+        }
+        #openfl-content { 
+            width: 100%; 
+            height: 100%; 
+        }
+
+        /* Fuentes del juego */
+        @font-face {
+            font-family: 'Pixel Arial 11 Bold';
+            src: url('assets/fonts/pixel.otf') format('truetype');
+        }
+        @font-face {
+            font-family: 'VCR OSD Mono';
+            src: url('assets/fonts/vcr.ttf') format('truetype');
+        }
+    </style>
+</head>
+<body>
+    
+    <noscript>Este juego requiere JavaScript activo para funcionar.</noscript>
+    
+    <div id="openfl-content"></div>
+    
+    <script type="text/javascript">
+        // Iniciar el motor del juego
+        lime.embed("PsychEngine", "openfl-content", 1280, 720, { parameters: {} });
+    </script>
+    
+</body>
+</html>
