@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FNF vs Pibby Corrupter - GS ¡GO!</title>
+    
+    <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" type="image/png" href="./favicon.png">
+    
+    <script type="text/javascript" src="./pibby.js"></script>
+    
+    <script>
+        window.addEventListener ("touchmove", function (event) { event.preventDefault (); }, { capture: false, passive: false });
+        if (typeof window.devicePixelRatio != 'undefined' && window.devicePixelRatio > 2) {
+            var meta = document.getElementById ("viewport");
+            meta.setAttribute ('content', 'width=device-width, initial-scale=' + (2 / window.devicePixelRatio) + ', user-scalable=no');
+        }
+        window.addEventListener("keydown", function(e) {if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {e.preventDefault(); }}, false);
+    </script>
+    
+    <style>
+        html,body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000; }
+        #openfl-content { background: #000000; width: 100%; height: 100%; }
+
+        /* ESTILO DEL BOTÓN GLITCH PARA PIBBY */
+        .btn-volver {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 999999;
+            padding: 12px 25px;
+            background: rgba(10, 10, 10, 0.9) !important;
+            color: #00ffea !important; /* Color cian glitch */
+            border: 2px solid #ff00ff !important; /* Borde magenta */
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 3px 3px 0px #ff00ff, -3px -3px 0px #00ffea;
+            transition: 0.1s;
+        }
+
+        .btn-volver:hover {
+            box-shadow: 1px 1px 0px #ff00ff, -1px -1px 0px #00ffea;
+            transform: translate(2px, 2px);
+            background: #ff00ff !important;
+            color: #000 !important;
+        }
+
+        /* Fuentes */
+        @font-face { font-family: 'Pixel Arial 11 Bold'; src: url('assets/fonts/pixel.otf') format('truetype'); }
+        @font-face { font-family: 'VCR OSD Mono'; src: url('assets/fonts/vcr.ttf') format('truetype'); }
+    </style>
+</head>
+<body>
+    
+    <noscript>This webpage makes extensive use of JavaScript. Please enable JavaScript in your web browser to view this page.</noscript>
+    
+    <div id="openfl-content"></div>
+
+    <div id="ui-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999998;">
+        <button class="btn-volver" style="pointer-events: auto;" onclick="window.location.href='https://gamesite--go.web.app/fnfzone.html'">
+            ESC - VOLVER
+        </button>
+    </div>
+    
+    <script type="text/javascript">
+        lime.embed ("PsychEngine", "openfl-content", 1280, 720, { parameters: {} });
+
+        // Escape también funciona para salir
+        document.addEventListener('keydown', (e) => {
+            if(e.key === "Escape" || e.keyCode === 27) {
+                window.location.href = 'https://gamesite--go.web.app/fnfzone.html';
+            }
+        });
+    </script>
+</body>
+</html>
