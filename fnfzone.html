@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>FNF ZONE | SELECCIÓN COMPLETA</title>
+    <title>FNF ZONE | SELECCIÓN COMPLETA - K STUDIOS</title>
     <style>
         :root {
             --fnf-cyan: #00ffff;
@@ -17,17 +17,30 @@
         }
 
         header {
-            padding: 20px; background: #000; border-bottom: 3px solid var(--fnf-magenta);
-            text-align: right; /* El botón de salida a la derecha */
-            position: sticky; top: 0; z-index: 100;
+            padding: 15px 20px; 
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 3px solid var(--fnf-magenta);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed; 
+            top: 0; left: 0; width: 100%; 
+            z-index: 10000; 
+            box-sizing: border-box;
+        }
+
+        .logo-zone {
+            color: var(--fnf-magenta);
+            font-weight: bold;
+            font-size: 22px;
+            text-shadow: 2px 2px var(--fnf-cyan);
         }
 
         .back-to-gamesite {
-            display: inline-block;
             color: var(--fnf-cyan);
             text-decoration: none;
             border: 2px solid var(--fnf-cyan);
-            padding: 10px 25px;
+            padding: 8px 20px;
             background: #000;
             cursor: pointer;
             font-weight: bold;
@@ -37,14 +50,15 @@
 
         .back-to-gamesite:hover {
             background: var(--fnf-cyan);
-            box-shadow: 0 0 20px var(--fnf-cyan);
             color: black;
+            box-shadow: 0 0 15px var(--fnf-cyan);
         }
 
         .mods-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px; padding: 40px;
+            gap: 25px; 
+            padding: 100px 40px 40px 40px; 
         }
 
         .card {
@@ -74,13 +88,14 @@
         .card:hover { border-color: var(--fnf-cyan); transform: scale(1.05); }
 
         .card-info { position: relative; z-index: 2; padding: 20px; text-align: center; }
-        .card-info h3 { margin: 0; font-size: 20px; color: #fff; text-shadow: 2px 2px #000; }
-        .card-info p { margin: 5px 0 0; font-size: 12px; color: var(--fnf-cyan); font-weight: bold; }
+        .card-info h3 { margin: 0; font-size: 18px; color: #fff; text-shadow: 2px 2px #000; }
+        .card-info p { margin: 5px 0 0; font-size: 11px; color: var(--fnf-cyan); font-weight: bold; }
     </style>
 </head>
 <body>
 
 <header>
+    <div class="logo-zone">K STUDIOS - FNF ZONE</div>
     <button class="back-to-gamesite" onclick="location.href='index.html'">SALIR A GAMESITE</button>
 </header>
 
@@ -88,66 +103,51 @@
     <div class="card" style="background-image: url('pagesprites/iridaportada.jpg');" onclick="location.href='iirida/index.html'">
         <div class="card-info"><h3>JEFFYS INFINITE IRIDA</h3><p>OPEN MOD</p></div>
     </div>
-    
     <div class="card" style="background-image: url('pagesprites/stevenportada.jpg');" onclick="location.href='steven/index.html'">
         <div class="card-info"><h3>STEVEN MINIMODPACK</h3><p>OPEN MOD</p></div>
     </div>
-
     <div class="card" style="background-image: url('pagesprites/sonicportada.jpg');" onclick="location.href='sonic.exe/index.html'">
         <div class="card-info"><h3>SONIC.EXE</h3><p>OPEN MOD</p></div>
     </div>
-
     <div class="card" style="background-image: url('pagesprites/poriferaportada.jpg');" onclick="location.href='porifera/index.html'">
         <div class="card-info"><h3>PORIFERA ATOLL</h3><p>OPEN MOD</p></div>
     </div>
-
     <div class="card" style="background-image: url('pagesprites/aethosportada.jpg');" onclick="location.href='aethos/index.html'">
         <div class="card-info"><h3>JEFFYS ENDLESS AETHOS</h3><p>OPEN MOD</p></div>
     </div>
-
     <div class="card" style="background-image: url('pagesprites/skyportada.jpg');" onclick="location.href='skyreborn/index.html'">
         <div class="card-info"><h3>SKY REBORN</h3><p>OPEN MOD</p></div>
     </div>
-    
     <div class="card" style="background-image: url('pagesprites/pibby2portada.png');" onclick="location.href='pibby2/index.html'">
         <div class="card-info"><h3>PIBBY APOCALYPSE</h3><p>OPEN MOD</p></div>
     </div>
-
     <div class="card" style="background-image: url('pagesprites/shucksv2portada.webp');" onclick="location.href='shucks/index.html'">
-        <div class="card-info"><h3>SHUCKS V2</h3><p>⚠️CONTIENE LUCES PARPADEANTES⚠️</p></div>
+        <div class="card-info"><h3>SHUCKS V2</h3><p>⚠️LUCES PARPADEANTES⚠️</p></div>
     </div>
-
     <div class="card" style="background-image: url('pagesprites/vskapiportada.jpg');" onclick="location.href='kapi/index.html'">
         <div class="card-info"><h3>ARCADE SHOWDOWN</h3><p>OPEN MOD</p></div>
     </div>
-
     <div class="card" style="background-image: url('pagesprites/pibbyportada.webp');" onclick="location.href='pibby/index.html'">
         <div class="card-info"><h3>PIBBY CORRUPTER</h3><p>OPEN MOD</p></div>
     </div>
-
     <div class="card" style="background-image: url('pagesprites/mcmrebootportada.jpg');" onclick="location.href='mcm/index.html'">
         <div class="card-info"><h3>MISTFUL CRIMSON MORNING</h3><p>REBOOT</p></div>
     </div>
-
     <div class="card" style="background-image: url('pagesprites/hitsingleportada.jpg');" onclick="location.href='hits/index.html'">
         <div class="card-info"><h3>HIT SINGLE REAL</h3><p>OPEN MOD</p></div>
     </div>
-
     <div class="card" style="background-image: url('pagesprites/breakerportada.jpg');" onclick="location.href='gamebreaker-bundle/index.html'">
         <div class="card-info"><h3>GAMEBREAKER-BUNDLE</h3><p>OPEN MOD</p></div>
     </div>
-
     <div class="card" style="background-image: url('pagesprites/ironlungportada.jpg');" onclick="location.href='iron-lung/index.html'">
         <div class="card-info"><h3>IRON LUNG</h3><p>OPEN MOD</p></div>
     </div>
-
     <div class="card" style="background-image: url('pagesprites/fingerportada.jpg');" onclick="location.href='twiddlefinger/index.html'">
         <div class="card-info"><h3>TWIDDLEFINGER</h3><p>OPEN MOD</p></div>
     </div>
 </div>
 
 <script>
-    // Script para que la tecla ESC te regrese a la pantalla principal
     document.addEventListener('keydown', (e) => {
         if(e.key === "Escape" || e.keyCode === 27) {
             location.href = 'index.html';
