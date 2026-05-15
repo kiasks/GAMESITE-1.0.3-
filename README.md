@@ -4,7 +4,7 @@
 Bienvenido a mi colección de juegos integrados en una sola plataforma. Explora mundos 3D, sobrevive a desafíos clásicos y pon a prueba las leyes de la física.
 
 ## 🚀 Próximo Lanzamiento
-Marquen sus calendarios: **15 de Abril, 2026**.
+Marquen sus calendarios: **...**.
 
 ## 🎮 Lista de Juegos
 - **HTMLphysics 3D**: Simulación de físicas destructibles.
@@ -19,7 +19,7 @@ Marquen sus calendarios: **15 de Abril, 2026**.
 - **Code & Physics:** Gemini AI
 - **Ports:** codebeautify (FNF y GRANNY), yell0wsuit (cuttherope) y c1tcher (PsychEngine mods)
 - **Original Games:** ninjamuffin99 (FNF), DVloper (Granny1,2) Zeptolab (Cut The Rope) Halfbrick (Fruit Ninja,Jetpack Joyride) Paradyme Games (Solar Smash) Anna (Crazy Cattle 3D)-segun gemini. Team cherry (Hollow Knight)
-- Basically Games (Baldis basics ,Baldis basics plus) Scott Cawthon (five nights at freddys 3) Emil "Ace" Macko (five nights at candys 2) Eric Gurt. (Ragdoll Archers) KBH games (Jefys endless aethos)
+- Basically Games (Baldis basics ,Baldis basics plus) Scott Cawthon (five nights at freddys 3) Emil "Ace" Macko (five nights at candys 2) Eric Gurt. (Ragdoll Archers) KBH games (Jefys endless aethos) waycrosspublicmedia (fnf mods)
 
 - Kiasks o kias2 (GameSite, Snake 3D, HtmL Physics 3D, Death Case y 1v1??¡?¡?¡?¡?)
 

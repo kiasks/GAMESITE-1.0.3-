@@ -2,83 +2,115 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>GAME SITE (UPTADE)</title>
+    <title>GAME SITE (UPDATE)</title>
     <link rel="icon" type="image/png" href="pagesprites/FAVICON.png">
     
     <style>
         body { 
-            margin: 0; background: #050505; color: #fff; 
+            margin: 0; background: #020202; color: #fff; 
             font-family: 'Courier New', monospace; 
             overflow-y: scroll; 
             overflow-x: hidden;
             display: flex; flex-direction: row; min-height: 100vh;
+            /* Fondo con rejilla sutil para estética hacker */
+            background-image: linear-gradient(rgba(0, 255, 0, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 255, 0, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
 
-        /* 🔳 SIDEBAR IZQUIERDA */
+        /* 🔳 SIDEBAR IZQUIERDA - Más futurista */
         .sidebar {
-            width: 80px; height: 100vh; background: #111;
-            border-right: 2px solid #0f0; position: fixed;
+            width: 80px; height: 100vh; background: #000;
+            border-right: 3px solid #0f0; position: fixed;
             display: flex; flex-direction: column; align-items: center;
-            padding-top: 20px; z-index: 50; transition: width 0.3s;
+            padding-top: 20px; z-index: 50; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 5px 0 15px rgba(0, 255, 0, 0.2);
         }
 
-        .sidebar:hover { width: 180px; }
+        .sidebar:hover { width: 180px; background: #0a0a0a; }
 
         .sidebar-item {
-            width: 100%; padding: 15px 0; text-align: center;
+            width: 100%; padding: 20px 0; text-align: center;
             cursor: pointer; transition: 0.3s; color: #0f0;
             text-decoration: none; font-weight: bold; font-size: 11px;
             white-space: nowrap; overflow: hidden;
+            letter-spacing: 2px;
         }
 
-        .sidebar-item:hover { background: rgba(0, 255, 0, 0.1); text-shadow: 0 0 10px #0f0; }
+        .sidebar-item:hover { 
+            background: #0f0; color: #000;
+            box-shadow: inset 0 0 20px #000;
+            text-shadow: none;
+        }
 
         /* CONTENIDO PRINCIPAL */
         .main-content {
             margin-left: 80px; flex-grow: 1;
             display: flex; flex-direction: column; align-items: center;
             padding: 20px;
+            background: radial-gradient(circle at center, #0a0a0a 0%, #020202 100%);
         }
 
         .menu-logo {
-            max-width: 300px; height: auto; margin-top: 10px;
-            filter: drop-shadow(0 0 15px #0f0);
+            max-width: 320px; height: auto; margin-top: 10px;
+            filter: drop-shadow(0 0 20px #0f0);
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 15px #0f0); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 30px #0f0); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 15px #0f0); }
         }
 
         #arcade-title {
-            font-size: 40px; color: #0f0; text-shadow: 0 0 20px #0f0;
-            margin-bottom: 40px; letter-spacing: 5px; text-align: center;
+            font-size: 45px; color: #fff; text-shadow: 0 0 10px #0f0, 0 0 20px #0f0;
+            margin-bottom: 40px; letter-spacing: 10px; text-align: center;
+            font-weight: 900;
+            border-bottom: 4px solid #0f0;
+            padding-bottom: 10px;
         }
 
         .menu-container {
-            display: flex; gap: 25px; flex-wrap: wrap; justify-content: center;
-            max-width: 1200px; padding-bottom: 50px;
+            display: flex; gap: 30px; flex-wrap: wrap; justify-content: center;
+            max-width: 1300px; padding-bottom: 80px;
         }
 
+        /* 🎮 GAME CARDS - Efecto Elevado */
         .game-card {
-            width: 210px; height: 300px; background: #111;
-            border: 3px solid #333; border-radius: 12px;
+            width: 220px; height: 310px; background: #000;
+            border: 2px solid #1a1a1a; border-radius: 0px; /* Estilo arcade cuadrado */
             display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-            cursor: pointer; transition: 0.4s; position: relative; overflow: hidden;
+            cursor: pointer; transition: 0.3s ease-out; position: relative; overflow: hidden;
             background-size: cover; background-position: center;
         }
 
+        .game-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 255, 0, 0.1); mix-blend-mode: overlay; opacity: 0; transition: 0.3s;
+        }
+
         .game-card::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 40%;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); z-index: 1;
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%;
+            background: linear-gradient(to top, #000 20%, transparent); z-index: 1;
         }
 
         .game-card:hover {
-            transform: scale(1.05); border-color: var(--color);
-            box-shadow: 0 0 20px var(--color);
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--color);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.8), 0 0 20px var(--color);
         }
+
+        .game-card:hover::before { opacity: 1; }
 
         .game-name { 
-            font-size: 14px; font-weight: bold; z-index: 2; 
-            margin-bottom: 15px; text-shadow: 2px 2px 4px #000; text-align: center;
+            font-size: 13px; font-weight: bold; z-index: 2; 
+            margin-bottom: 20px; text-shadow: 2px 2px 5px #000; text-align: center;
+            color: #fff; letter-spacing: 1px;
+            background: rgba(0,0,0,0.7); width: 100%; padding: 5px 0;
         }
 
-        /* 🖼️ PORTADAS */
+        /* 🖼️ TUS PORTADAS (Sin cambios de nombres) */
         .snake-card { --color: #0f0; background-image: url('pagesprites/snakeportada.png'); }
         .fnf-card { --color: #ff00ff; background-image: url('pagesprites/fnfportada.jpg'); }
         .fruit-card { --color: #ffcc00; background-image: url('pagesprites/fruitninjaportada.png'); }
@@ -97,6 +129,9 @@
         .cut-the-rope-card { --color: #a3ff00; background-image: url('pagesprites/cuttherope.jpg'); }
         .druken-boxing-card { --color: #0088ff; background-image: url('pagesprites/drukenportada.png'); }
         .htmlphysics-card { --color: #0088ff; background-image: url('GAMESSPRITES/LOGOHTMLPHYSICS.png'); }
+        .hippo-card { --color: #0088ff; background-image: url('pagesprites/hippoportada.jpg'); }
+        .tom-card { --color: #0088ff; background-image: url('pagesprites/tomportada'); }
+        .shapes-card { --color: #0088ff; background-image: url('pagesprites/shapes.png'); }
 
         /* IFRAME SISTEMA */
         #game-frame-container {
@@ -106,15 +141,18 @@
         iframe { width: 100%; height: 100%; border: none; }
         #back-btn {
             position: absolute; top: 20px; left: 20px; 
-            padding: 10px 20px; background: #222; color: #fff;
-            border: 2px solid #555; cursor: pointer; z-index: 110;
+            padding: 12px 25px; background: #000; color: #0f0;
+            border: 2px solid #0f0; cursor: pointer; z-index: 110;
+            font-family: 'Courier New', monospace; font-weight: bold;
+            box-shadow: 0 0 15px #0f0;
         }
+        #back-btn:hover { background: #0f0; color: #000; }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <div class="sidebar-item" onclick="location.href='fnfzone.html'">FNF ZONE</div>
+        <div class="sidebar-item" onclick="location.href='fnfzone.html'">[ FNF ZONE ]</div>
     </div>
 
     <div class="main-content">
@@ -140,11 +178,14 @@
             <div class="game-card cut-the-rope-card" onclick="openGame('CUTTHEROPEORIGINAL.html')"><div class="game-name">CUT THE ROPE</div></div>
             <div class="game-card druken-boxing-card" onclick="openGame('drukenboxing.html')"><div class="game-name">DRUKEN BOXING</div></div>
             <div class="game-card htmlphysics-card" onclick="openGame('HTMLphysics.html')"><div class="game-name">HTML PHYSICS 3D</div></div>
+            <div class="game-card hippo-card" onclick="openGame('talking-hippo-main/index.html')"><div class="game-name">TALKING HIPPO</div></div>
+            <div class="game-card tom-card" onclick="openGame('talkingtomclassic.html')"><div class="game-name">TALKING TOM CLASSIC</div></div>
+            <div class="game-card shapes-card" onclick="openGame('jsab-main/index.html')"><div class="game-name">JUST SHAPES AND BEATS</div></div>
         </div>
     </div>
 
     <div id="game-frame-container">
-        <button id="back-btn" onclick="closeGame()">ESC - VOLVER</button>
+        <button id="back-btn" onclick="closeGame()">[ ESC - VOLVER ]</button>
         <iframe id="game-frame" src=""></iframe>
     </div>
 
