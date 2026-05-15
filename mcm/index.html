@@ -27,31 +27,6 @@
         @font-face { font-family: 'Arial'; src: url('assets/fonts/ARIAL.TTF') format('truetype'); }
         @font-face { font-family: 'Krabby Patty'; src: url('assets/fonts/krabby.ttf') format('truetype'); }
         @font-face { font-family: 'VCR OSD Mono'; src: url('assets/fonts/vcr.ttf') format('truetype'); }
-
-        /* BOTÓN VOLVER ESTILO MCM / BOB ESPONJA */
-        .btn-volver {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            z-index: 999999;
-            padding: 10px 20px;
-            background: #f3f315 !important; /* Amarillo Bob Esponja */
-            color: #000 !important;
-            border: 4px solid #9e6400 !important;
-            border-radius: 8px;
-            font-family: 'Krabby Patty', 'Arial', sans-serif;
-            font-weight: bold;
-            font-size: 18px;
-            cursor: pointer;
-            box-shadow: 4px 4px 0px #000;
-            transition: 0.2s;
-            text-transform: uppercase;
-        }
-        .btn-volver:hover {
-            background: #fff !important;
-            transform: scale(1.05);
-            box-shadow: 2px 2px 0px #000;
-        }
     </style>
 </head>
 <body>
@@ -59,22 +34,9 @@
     <noscript>This webpage makes extensive use of JavaScript. Please enable JavaScript in your web browser to view this page.</noscript>
     
     <div id="openfl-content"></div>
-
-    <div id="ui-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999998;">
-        <button class="btn-volver" style="pointer-events: auto;" onclick="window.location.href='https://gamesite--go.web.app/fnfzone.html'">
-            ESC - VOLVER
-        </button>
-    </div>
     
     <script type="text/javascript">
         lime.embed ("PsychEngine", "openfl-content", 1280, 720, { parameters: {} });
-
-        // Manejo de la tecla Escape para volver
-        document.addEventListener('keydown', (e) => {
-            if(e.key === "Escape" || e.keyCode === 27) {
-                window.location.href = 'https://gamesite--go.web.app/fnfzone.html';
-            }
-        });
     </script>
 </body>
 </html>
