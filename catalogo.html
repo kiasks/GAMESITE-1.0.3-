@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GS GALLERY - Menú Principal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #0f0f0f; color: #f1f1f1; }
+        header { background-color: #212121; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #383838; }
+        .logo { font-size: 20px; font-weight: bold; color: #ff0000; letter-spacing: -1px; }
+        .logo span { color: #fff; font-size: 14px; margin-left: 5px; background-color: #383838; padding: 2px 6px; border-radius: 4px; }
+        .user-profile { background-color: #0055ff; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .content-wrapper { max-width: 1600px; margin: 0 auto; padding: 30px 20px; }
+        .seccion-titulo { font-size: 22px; font-weight: bold; margin-bottom: 20px; border-left: 4px solid #ff0000; padding-left: 10px; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+        .video-card { display: flex; flex-direction: column; cursor: pointer; text-decoration: none; color: inherit; transition: transform 0.2s; }
+        .video-card:hover { transform: scale(1.02); }
+        .thumbnail-container { width: 100%; aspect-ratio: 16 / 9; background-color: #282828; border-radius: 12px; overflow: hidden; }
+        .thumbnail-container img { width: 100%; height: 100%; object-fit: cover; }
+        .card-details { display: flex; gap: 12px; margin-top: 12px; padding: 0 4px; }
+        .channel-avatar { width: 36px; height: 36px; border-radius: 50%; background-color: #383838; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; flex-shrink: 0; }
+        .text-details { display: flex; flex-direction: column; }
+        .video-title { font-size: 15px; font-weight: bold; line-height: 1.4; color: #fff; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; }
+        .video-author { font-size: 13px; color: #aaa; }
+        .video-meta { font-size: 13px; color: #aaa; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">GS GALLERY<span>[BETA]</span></div>
+        <div class="user-profile" id="userAvatar">U</div>
+    </header>
+
+    <main class="content-wrapper">
+        <h2 class="seccion-titulo">Recomendados</h2>
+        <div class="video-grid" id="main-catalog"></div>
+    </main>
+
+    <script>
+        if (!localStorage.getItem('usuarioLogueado')) {
+            window.location.href = "login.html";
+        }
+
+        // Recuperamos o inicializamos las vistas de la base de datos local
+        const vistasSilly = localStorage.getItem('vistas_silly_billy') || "1245";
+        const vistasBots = localStorage.getItem('vistas_enemy_bots') || "0";
+
+        const catalogoVideos = [
+            {
+                titulo: "Friday Night Funkin' - Silly Billy (Lyrics) OST",
+                miniatura: "videosprites/miniaturasilly.png",
+                autor: "GS_Admin",
+                vistas: vistasSilly,
+                subido: "Hace 1 día",
+                link: "video.html"
+            },
+            {
+                titulo: "Multiplayer Physics - Enemy Bots Test (Simulación de IA)",
+                miniatura: "videosprites/miniaturaP.png",
+                autor: "GS_Admin",
+                vistas: vistasBots,
+                subido: "Hace 2 horas", // Sistema de tiempo de subida añadido al menú
+                link: "video2.html" 
+            },
+            {
+           titulo: "NO TOCAR- DONT TOUCH",
+              
+                autor: "GS_Admin",
+               
+                link: "404.html"
+
+            },
+        ];
+
+        const catalogContainer = document.getElementById('main-catalog');
+
+        function cargarPortada() {
+            catalogContainer.innerHTML = "";
+            catalogoVideos.forEach(video => {
+                const card = document.createElement('a');
+                card.href = video.link; 
+                card.className = "video-card";
+                
+                // Formateamos el texto de las vistas y tiempo de subida de forma unificada
+                let textoMeta = video.subido === "Próximamente" ? "Próximamente • Adelanto" : `${parseInt(video.vistas).toLocaleString()} vistas • ${video.subido}`;
+
+                card.innerHTML = `
+                    <div class="thumbnail-container">
+                        <img src="${video.miniatura}" alt="Miniatura">
+                    </div>
+                    <div class="card-details">
+                        <div class="channel-avatar">GS</div>
+                        <div class="text-details">
+                            <div class="video-title">${video.titulo}</div>
+                            <div class="video-author">${video.autor}</div>
+                            <div class="video-meta">${textoMeta}</div>
+                        </div>
+                    </div>
+                `;
+                catalogContainer.appendChild(card);
+            });
+        }
+
+        cargarPortada();
+
+        const nombreGuardado = localStorage.getItem('usuarioLogueado');
+        if (nombreGuardado) {
+            document.getElementById('userAvatar').innerText = nombreGuardado.charAt(0).toUpperCase();
+        }
+    </script>
+</body>
+</html>

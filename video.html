@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GS GALLERY - Silly Billy</title>
+    <style>
+        /* Estilos estilo YouTube Modo Oscuro */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f0f0f; color: #f1f1f1; }
+        header { background-color: #212121; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 20px; font-weight: bold; color: #ff0000; letter-spacing: -1px; text-decoration: none; cursor: pointer; }
+        .logo span { color: #fff; font-size: 14px; margin-left: 5px; background-color: #383838; padding: 2px 6px; border-radius: 4px; }
+        .user-profile { background-color: #0055ff; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; transition: filter 0.2s; }
+        .user-profile:hover { filter: brightness(1.2); }
+        .profile-modal { display: none; position: absolute; top: 55px; right: 20px; background-color: #282828; border: 1px solid #383838; border-radius: 8px; padding: 20px; width: 280px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 200; }
+        .profile-modal-header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #383838; padding-bottom: 12px; margin-bottom: 12px; }
+        .profile-modal-avatar { width: 45px; height: 45px; border-radius: 50%; background-color: #0055ff; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; }
+        .profile-info-text h4 { font-size: 15px; color: #fff; }
+        .profile-info-text p { font-size: 13px; color: #aaa; word-break: break-all; }
+        .btn-logout { width: 100%; padding: 8px; background-color: #ff0000; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px; }
+        .main-container { max-width: 1400px; margin: 20px auto; padding: 0 20px; display: grid; grid-template-columns: 2.5fr 1fr; gap: 24px; }
+        .video-column { display: flex; flex-direction: column; }
+        .video-player-box { width: 100%; background-color: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16 / 9; }
+        video { width: 100%; height: 100%; object-fit: contain; }
+        .video-info { margin-top: 12px; }
+        .video-title { font-size: 20px; font-weight: bold; margin-bottom: 8px; }
+        .video-stats { font-size: 14px; color: #aaa; padding-bottom: 12px; border-bottom: 1px solid #383838; }
+        .comments-section { margin-top: 24px; }
+        .comments-section h3 { font-size: 18px; margin-bottom: 15px; }
+        .comment-input-box { display: flex; gap: 12px; margin-bottom: 25px; align-items: flex-start; }
+        .comment-input-container { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .comment-input-container textarea { width: 100%; background: transparent; border: none; border-bottom: 2px solid #383838; color: #fff; font-size: 14px; padding: 6px 0; outline: none; resize: none; height: 35px; transition: border-color 0.2s; }
+        .comment-input-container textarea:focus { border-bottom-color: #fff; }
+        .comment-buttons { display: flex; justify-content: flex-end; gap: 8px; }
+        .btn-comment { padding: 8px 16px; border-radius: 18px; border: none; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .btn-comment.cancel { background-color: transparent; color: #fff; }
+        .btn-comment.cancel:hover { background-color: #383838; }
+        .btn-comment.submit { background-color: #0055ff; color: #fff; }
+        #comments-list { display: flex; flex-direction: column; gap: 16px; }
+        .comment-box { display: flex; gap: 12px; }
+        .comment-avatar { width: 40px; height: 40px; border-radius: 50%; background-color: #555; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: white; flex-shrink: 0; }
+        .comment-content .author { font-size: 13px; font-weight: bold; color: #fff; margin-bottom: 4px; }
+        .comment-content .text { font-size: 14px; color: #f1f1f1; }
+        .sidebar-column { display: flex; flex-direction: column; gap: 16px; }
+        .sidebar-title { font-size: 16px; font-weight: bold; margin-bottom: 5px; }
+        .recommended-card { display: flex; gap: 8px; cursor: pointer; text-decoration: none; color: inherit; }
+        .thumbnail-placeholder { width: 140px; height: 78px; background-color: #282828; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #aaa; font-weight: bold; }
+        .card-info { display: flex; flex-direction: column; justify-content: center; }
+        .card-title { font-size: 14px; font-weight: bold; line-height: 1.2; margin-bottom: 4px; color: #fff; }
+        .card-author { font-size: 12px; color: #aaa; }
+        @media (max-width: 900px) { .main-container { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <script>
+        if (!localStorage.getItem('usuarioLogueado')) { window.location.href = "login.html"; }
+
+        // SISTEMA DE VISTAS REALES DE SILLY BILLY
+        let contadorVistas = parseInt(localStorage.getItem('vistas_silly_billy')) || 1245;
+        contadorVistas++; // Suma una vista real al entrar
+        localStorage.setItem('vistas_silly_billy', contadorVistas);
+    </script>
+
+    <header>
+        <a href="catalogo.html" class="logo">GS GALLERY<span>[BETA]</span></a>
+        <div class="user-profile" id="userAvatar" onclick="togglePerfil()">U</div>
+    </header>
+
+    <div class="profile-modal" id="profileModal">
+        <div class="profile-modal-header">
+            <div class="profile-modal-avatar" id="modalLetter">U</div>
+            <div class="profile-info-text">
+                <h4 id="modalUsername">Invitado</h4>
+                <p id="modalEmail">sin_correo@gmail.com</p>
+            </div>
+        </div>
+        <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
+    </div>
+
+    <main class="main-container">
+        <section class="video-column">
+            <div class="video-player-box">
+                <video src="GSGALLERYSTORAGE/sillybilly.mp4" poster="videosprites/miniaturasilly.png" controls autoplay></video>
+            </div>
+            
+            <div class="video-info">
+                <h1 class="video-title">Friday Night Funkin' - Silly Billy (Lyrics) OST</h1>
+                <div class="video-stats" id="info-stats">Administrado por: GS_Admin • Cargando estadísticas...</div>
+            </div>
+
+            <div class="comments-section">
+                <h3>Comentarios</h3>
+                <div class="comment-input-box">
+                    <div class="comment-avatar" id="commentUserLetter" style="background-color: #0055ff;">U</div>
+                    <div class="comment-input-container">
+                        <textarea id="new-comment-text" placeholder="Añade un comentario público..."></textarea>
+                        <div class="comment-buttons">
+                            <button class="btn-comment cancel" onclick="limpiarComentario()">Cancelar</button>
+                            <button class="btn-comment submit" onclick="publicarComentario()">Comentar</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="comments-list"></div>
+            </div>
+        </section>
+
+        <aside class="sidebar-column">
+            <h2 class="sidebar-title">Siguiente contenido</h2>
+            <a href="video2.html" class="recommended-card">
+                <div class="thumbnail-placeholder" style="border-left: 4px solid #0055ff;">AI BOTS</div>
+                <div class="card-info">
+                    <div class="card-title">Multiplayer Physics - Enemy Bots Test</div>
+                    <div class="card-author">GS Classic</div>
+                </div>
+            </a>
+        </aside>
+    </main>
+
+    <script>
+        // Imprimir las vistas actualizadas en el HTML
+        document.getElementById('info-stats').innerText = `Administrado por: GS_Admin • ${contadorVistas.toLocaleString()} vistas • Hace 1 día`;
+
+        const nombreGuardado = localStorage.getItem('usuarioLogueado') || "Invitado";
+        const gmailGuardado = localStorage.getItem('gmailLogueado') || `${nombreGuardado.toLowerCase()}@gmail.com`;
+
+        const letraInicial = nombreGuardado.charAt(0).toUpperCase();
+        document.getElementById('userAvatar').innerText = letraInicial;
+        document.getElementById('commentUserLetter').innerText = letraInicial;
+        document.getElementById('modalLetter').innerText = letraInicial;
+        document.getElementById('modalUsername').innerText = nombreGuardado;
+        document.getElementById('modalEmail').innerText = gmailGuardado;
+
+        function togglePerfil() {
+            const modal = document.getElementById('profileModal');
+            modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+
+        function cargarComentarios() {
+            const listContainer = document.getElementById('comments-list');
+            listContainer.innerHTML = ""; 
+            let misComentarios = JSON.parse(localStorage.getItem('comentarios_silly_billy')) || [];
+            misComentarios.forEach(texto => {
+                const box = document.createElement('div');
+                box.className = "comment-box";
+                box.innerHTML = `
+                    <div class="comment-avatar" style="background-color: #0055ff;">${nombreGuardado.charAt(0).toUpperCase()}</div>
+                    <div class="comment-content">
+                        <div class="author">${nombreGuardado}</div>
+                        <div class="text">${texto}</div>
+                    </div>
+                `;
+                listContainer.appendChild(box);
+            });
+        }
+
+        function publicarComentario() {
+            const txtArea = document.getElementById('new-comment-text');
+            const mensaje = txtArea.value.trim();
+            if (mensaje === "") return;
+
+            let misComentarios = JSON.parse(localStorage.getItem('comentarios_silly_billy')) || [];
+            misComentarios.push(mensaje);
+            localStorage.setItem('comentarios_silly_billy', JSON.stringify(misComentarios));
+            cargarComentarios();
+            txtArea.value = "";
+        }
+
+        function limpiarComentario() { document.getElementById('new-comment-text').value = ""; }
+
+        cargarComentarios();
+
+        window.onclick = function(event) {
+            if (!event.target.matches('#userAvatar') && !event.target.closest('#profileModal')) {
+                document.getElementById('profileModal').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
