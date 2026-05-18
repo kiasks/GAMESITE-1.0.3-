@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>HTMLPHYSICS v1.6.5 - Jojo's Multiplayer (PC Ultimate Edition)</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #000; font-family: 'Segoe UI', sans-serif; user-select: none; }
+        
+        #game-canvas { transition: filter 0.5s ease; }
+        .ts-active #game-canvas { filter: grayscale(1) contrast(1.3) brightness(0.7); }
+
+        /* Pantalla Inicial: Selector de Dispositivo */
+        #device-overlay { position: absolute; inset: 0; background: radial-gradient(circle, #002060, #000); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2000; color: white; text-align: center; }
+        .device-title { font-size: 2rem; font-weight: bold; margin-bottom: 30px; letter-spacing: 2px; color: #ffeb3b; text-shadow: 2px 2px 10px black; }
+        .device-options { display: flex; gap: 20px; }
+        .device-btn { padding: 20px 40px; font-size: 1.3rem; font-weight: bold; color: white; background: #0050E6; border: 3px solid #00E5FF; border-radius: 15px; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .device-btn:hover { transform: scale(1.05); background: #25D366; border-color: white; box-shadow: 0 0 20px #25D366; }
+
+        /* Estilos del Menú */
+        #menu-overlay { position: absolute; inset: 0; background: radial-gradient(circle, #0050E6, #002060); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; color: white; }
+        #logo { max-width: 500px; height: auto; margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(255,255,255,0.4)); }
+        
+        .input-container { margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; }
+        .input-label { font-size: 1.1rem; font-weight: bold; margin-bottom: 8px; letter-spacing: 1px; color: #ffeb3b; text-shadow: 1px 1px 5px black; }
+        .name-input { padding: 12px 20px; font-size: 1.2rem; border: 3px solid #00E5FF; border-radius: 25px; background: rgba(0,0,0,0.6); color: white; text-align: center; outline: none; width: 250px; transition: 0.3s; }
+        .name-input:focus { box-shadow: 0 0 15px #00E5FF; background: rgba(0,0,0,0.8); }
+
+        .play-btn { padding: 18px 50px; font-size: 1.5rem; font-weight: bold; color: #0050E6; background: white; border: none; border-radius: 50px; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .play-btn:hover { transform: scale(1.05); background: #25D366; color: white; box-shadow: 0 0 20px #25D366; }
+        
+        #crosshair { position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; background: white; border: 2px solid black; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; display: none; }
+        #ui { position: absolute; bottom: 20px; left: 180px; color: white; text-shadow: 2px 2px black; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; pointer-events: none; display: none; }
+        #hud { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); color: #25D366; font-size: 1.8rem; font-weight: bold; text-shadow: 2px 2px black; pointer-events: none; display: none; }
+        
+        #ts-container { position: absolute; top: 70px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; pointer-events: none; z-index: 10; font-family: 'Arial Black'; text-align: center; }
+        #ts-timer { color: #fff; font-size: 3.5rem; font-weight: 900; text-shadow: 0 0 20px #0050E6; display: none; }
+        #ts-banner { color: #ffeb3b; font-size: 1.6rem; font-weight: bold; text-shadow: 0 0 15px #ff5722; display: none; background: rgba(0,0,0,0.6); padding: 5px 20px; border-radius: 8px; }
+        
+        .etiqueta-rival { position: absolute; color: #00E5FF; font-weight: bold; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 5px; border: 1px solid #00E5FF; font-size: 0.9rem; pointer-events: none; transform: translate(-50%, -100%); text-shadow: 1px 1px black; display: none; z-index: 500; }
+
+        #ts-selector { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 10px; color: white; display: none; border: 2px solid #0050E6; z-index: 1100; }
+        .ts-opt { padding: 8px 15px; margin: 5px; cursor: pointer; background: #333; border: 1px solid #555; color: white; border-radius: 5px; font-weight: bold; transition: 0.2s; }
+        .ts-opt:hover { background: #0050E6; transform: scale(1.05); }
+        .ts-opt.active { background: #25D366; border-color: white; box-shadow: 0 0 10px #25D366; }
+
+        /* INTERFAZ DEL CHAT */
+        #chat-wrapper { position: absolute; bottom: 180px; left: 20px; width: 320px; background: rgba(0, 0, 0, 0.7); border: 2px solid rgba(0, 229, 255, 0.5); border-radius: 10px; display: none; flex-direction: column; z-index: 1200; overflow: hidden; }
+        #chat-box { width: 100%; height: 140px; overflow-y: auto; padding: 10px; box-sizing: border-box; display: flex; flex-direction: column; gap: 4px; pointer-events: auto; }
+        .chat-msg { font-size: 0.95rem; color: #ffffff; line-height: 1.3rem; word-break: break-all; text-shadow: 1px 1px 2px black; }
+        .chat-msg .msg-user { color: #00E5FF; font-weight: bold; }
+        .chat-msg .msg-system { color: #ffeb3b; font-style: italic; }
+        #chat-input-row { display: flex; border-top: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0,0,0,0.5); }
+        #chat-input { flex-grow: 1; background: transparent; border: none; padding: 10px; color: white; outline: none; font-size: 0.95rem; }
+        #chat-send-btn { background: #0050E6; border: none; color: white; padding: 0 15px; cursor: pointer; font-weight: bold; font-size: 0.9rem; transition: 0.2s; pointer-events: auto; }
+        #chat-send-btn:hover { background: #25D366; }
+    </style>
+</head>
+<body>
+    <div id="device-overlay">
+        <div class="device-title">¿EN QUÉ JUEGAS?</div>
+        <div class="device-options">
+            <button class="device-btn" id="choose-pc">A - Computadora</button>
+            <button class="device-btn" id="choose-mobile">B - Celular (Usa index_android)</button>
+        </div>
+    </div>
+
+    <div id="ts-selector">
+        <div style="margin-bottom: 10px; font-size: 0.9rem; text-align: center;">DURACIÓN TIME STOP</div>
+        <button class="ts-opt" onclick="updateTS(10, this)">10s</button>
+        <button class="ts-opt" onclick="updateTS(30, this)">30s</button>
+        <button class="ts-opt active" onclick="updateTS(60, this)">60s</button>
+    </div>
+
+    <div id="menu-overlay">
+        <img id="logo" src="GAMESPRITES/LOGOHTMLPHYSICS.png" alt="HTMLPHYSICS Logo">
+        <div class="input-container">
+            <label class="input-label" for="username">INGRESA TU APODO (NAME) - PC:</label>
+            <input type="text" id="username" class="name-input" placeholder="Ej: Jotaro_PC" maxlength="12">
+        </div>
+        <button class="play-btn" id="startBtn">CONECTAR AL SERVIDOR</button>
+    </div>
+
+    <div id="ts-container">
+        <div id="ts-banner">ALGUIEN DETUVO EL TIEMPO</div>
+        <div id="ts-timer">60.00</div>
+    </div>
+    
+    <div id="crosshair"></div>
+    <div id="hud">SELECCIÓN: CAJA</div>
+    
+    <div id="chat-wrapper">
+        <div id="chat-box"></div>
+        <div id="chat-input-row">
+            <input type="text" id="chat-input" placeholder="Escribe un mensaje..." maxlength="70">
+            <button id="chat-send-btn">ENVIAR</button>
+        </div>
+    </div>
+
+    <div id="ui">
+        <b>WASD</b>: Mover | <b>CLICK IZQUIERDO</b>: Disparar Bloque<br>
+        <b>ESPACIO (Mantener)</b>: Volar/Subir | <b>ESPACIO (Soltar)</b>: Caer<br>
+        <b>T</b>: Time Stop | <b>R</b>: Limpiar Mapa | <b>E/Q</b>: Agarre<br>
+        <b>1, 2, 3, 4</b>: Cambiar Objeto | <b>ENTER</b>: Chat | <b>ESC</b>: Mouse
+    </div>
+
+    <div id="labels-container"></div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+                "cannon": "https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/+esm"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+        import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
+        import * as CANNON from 'cannon';
+
+        const socket = new WebSocket('https://multiplayerphysics.onrender.com/');
+        let miId = null;
+        let miNombre = "Invitado";
+        let rivales3D = {};
+        let juegoActivo = false;
+
+        let timeStopped = false;
+        let tsMaxDuration = 60; 
+        let tsCounter = 60;
+        let quienCongelo = null;
+
+        // Variables de Cooldown para Time Stop
+        let tsCooldownRestante = 0;
+
+        document.getElementById('choose-pc').addEventListener('click', () => {
+            document.getElementById('device-overlay').style.display = 'none';
+            document.getElementById('menu-overlay').style.display = 'flex';
+        });
+
+        document.getElementById('choose-mobile').addEventListener('click', () => {
+            window.location.href = "index-android.html";
+        });
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTsSound(isStopping) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = isStopping ? 'sawtooth' : 'sine';
+            osc.frequency.setValueAtTime(isStopping ? 150 : 60, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(isStopping ? 40 : 300, audioCtx.currentTime + 0.8);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.8);
+        }
+        
+        window.updateTS = (secs, element) => {
+            tsMaxDuration = secs;
+            tsCounter = secs;
+            const btns = document.querySelectorAll('.ts-opt');
+            btns.forEach(b => b.classList.remove('active'));
+            if(element) element.classList.add('active');
+        };
+
+        const clock = new THREE.Clock();
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87CEEB);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
+        renderer.domElement.id = "game-canvas"; 
+        document.body.appendChild(renderer.domElement);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 5000);
+        camera.position.set(0, 5, 0);
+        camera.rotation.order = 'YXZ';
+
+        const listener = new THREE.AudioListener();
+        camera.add(listener);
+        const audioLoader = new THREE.AudioLoader();
+        let hitSoundBuffer;
+        audioLoader.load('https://threejs.org/examples/sounds/ping_pong.mp3', (buffer) => { hitSoundBuffer = buffer; });
+
+        function playHitSound(position, volume) {
+            if(!hitSoundBuffer) return;
+            const sound = new THREE.PositionalAudio(listener);
+            sound.setBuffer(hitSoundBuffer);
+            sound.setRefDistance(10);
+            sound.setVolume(Math.min(volume * 0.4, 0.8));
+            const soundMesh = new THREE.Object3D();
+            soundMesh.position.copy(position);
+            scene.add(soundMesh);
+            soundMesh.add(sound);
+            sound.play();
+            setTimeout(() => scene.remove(soundMesh), 1000);
+        }
+
+        const world = new CANNON.World({ gravity: new CANNON.Vec3(0, -25, 0) });
+        const groundMat = new CANNON.Material();
+        const objMat = new CANNON.Material();
+        world.addContactMaterial(new CANNON.ContactMaterial(groundMat, objMat, { friction: 0.5, restitution: 0.3 }));
+
+        const playerBody = new CANNON.Body({ mass: 100, shape: new CANNON.Sphere(1.2), fixedRotation: true });
+        playerBody.position.set(0, 5, 0);
+        world.addBody(playerBody);
+
+        const mapSize = 500;
+        const grass = new THREE.TextureLoader().load('https://threejs.org/examples/textures/terrain/grasslight-big.jpg');
+        grass.wrapS = grass.wrapT = THREE.RepeatWrapping; grass.repeat.set(50, 50);
+        const floor = new THREE.Mesh(new THREE.BoxGeometry(mapSize, 2, mapSize), new THREE.MeshStandardMaterial({ map: grass }));
+        floor.position.y = -1; 
+        floor.receiveShadow = true; 
+        scene.add(floor);
+        const floorBody = new CANNON.Body({ mass: 0, shape: new CANNON.Box(new CANNON.Vec3(mapSize/2, 1, mapSize/2)), material: groundMat });
+        floorBody.position.set(0, -1, 0); world.addBody(floorBody);
+
+        scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+        const sunLight = new THREE.DirectionalLight(0xffffff, 1.4);
+        sunLight.position.set(100, 200, 100); 
+        sunLight.castShadow = true; 
+        sunLight.shadow.mapSize.width = 2048; 
+        sunLight.shadow.mapSize.height = 2048;
+        sunLight.shadow.camera.left = -mapSize/2;
+        sunLight.shadow.camera.right = mapSize/2;
+        sunLight.shadow.camera.top = mapSize/2;
+        sunLight.shadow.camera.bottom = -mapSize/2;
+        sunLight.shadow.camera.far = 1000;
+        scene.add(sunLight);
+
+        const mtlLoader = new MTLLoader();
+        mtlLoader.setPath('GAMESPRITES/');
+        mtlLoader.load('13913_Sun_v2_l3.mtl', (materials) => {
+            materials.preload();
+            const objLoader = new OBJLoader();
+            objLoader.setMaterials(materials);
+            objLoader.setPath('GAMESPRITES/');
+            objLoader.load('13913_Sun_v2_l3.obj', (object) => {
+                object.position.set(200, 350, -200);
+                object.scale.set(0.1, 0.1, 0.1); 
+                scene.add(object);
+                window.sunMesh = object;
+            });
+        });
+
+        const startBtn = document.getElementById('startBtn');
+        const menuOverlay = document.getElementById('menu-overlay');
+
+        startBtn.addEventListener('click', () => {
+            const inputName = document.getElementById('username').value.trim();
+            miNombre = inputName || "User_" + Math.floor(1000 + Math.random() * 9000);
+            
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({
+                    type: 'registro_nombre',
+                    nombre: miNombre
+                }));
+            }
+            
+            menuOverlay.style.display = 'none';
+            document.getElementById('hud').style.display = 'block';
+            document.getElementById('crosshair').style.display = 'block';
+            document.getElementById('chat-wrapper').style.display = 'flex'; 
+            document.getElementById('ts-selector').style.display = 'block';
+            document.getElementById('ui').style.display = 'block';
+
+            renderer.domElement.requestPointerLock();
+
+            juegoActivo = true;
+            chatAbierto = false;
+            if(!clock.running) clock.start();
+        });
+
+        renderer.domElement.addEventListener('click', () => {
+            if (juegoActivo && !chatAbierto) {
+                renderer.domElement.requestPointerLock();
+            }
+        });
+
+        window.addEventListener('mousedown', (e) => {
+            if (juegoActivo && !chatAbierto && document.pointerLockElement === renderer.domElement) {
+                if (e.button === 0) { 
+                    spawn(currentType, true);
+                }
+            }
+        });
+
+        let chatAbierto = false;
+
+        function requestToggleTimeStop() {
+            if(!timeStopped) {
+                // Validación del cooldown local antes de enviar la petición
+                if (tsCooldownRestante > 0) {
+                    agregarTextoAlChat(null, `⏳ Espera ${Math.ceil(tsCooldownRestante)}s para usar Time Stop de nuevo.`, true);
+                    return;
+                }
+                if (socket.readyState === WebSocket.OPEN) {
+                    socket.send(JSON.stringify({
+                        type: 'activar_ts',
+                        duracionMax: tsMaxDuration
+                    }));
+                }
+            } else {
+                if (quienCongelo === miId && socket.readyState === WebSocket.OPEN) {
+                    socket.send(JSON.stringify({ type: 'desactivar_ts' }));
+                }
+            }
+        }
+
+        function clearMap() {
+            for (let i = meshes.length - 1; i >= 0; i--) {
+                scene.remove(meshes[i]);
+                world.removeBody(bodies[i]);
+            }
+            meshes.length = 0; bodies.length = 0; deathTimes.length = 0;
+            heldBody = null;
+        }
+
+        let currentType = 'box';
+        const keys = {};
+
+        const chatInput = document.getElementById('chat-input');
+        const chatBox = document.getElementById('chat-box');
+        const chatSendBtn = document.getElementById('chat-send-btn');
+
+        function enviarMensajeChat() {
+            const txt = chatInput.value.trim();
+            if(txt.length > 0 && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({
+                    type: 'chat_mensaje',
+                    nombre: miNombre,
+                    texto: txt
+                }));
+            }
+            chatInput.value = "";
+            chatInput.blur();
+            chatAbierto = false;
+            renderer.domElement.requestPointerLock();
+        }
+
+        chatSendBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            enviarMensajeChat();
+        });
+
+        function agregarTextoAlChat(nombre, texto, esSistema = false) {
+            const p = document.createElement('div');
+            p.className = 'chat-msg';
+            if(esSistema) {
+                p.innerHTML = `<span class="msg-system">${texto}</span>`;
+            } else {
+                p.innerHTML = `<span class="msg-user">${nombre}:</span> ${texto}`;
+            }
+            chatBox.appendChild(p);
+            chatBox.scrollTop = chatBox.scrollHeight; 
+        }
+
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.code === 'Enter') {
+                e.stopPropagation();
+                enviarMensajeChat();
+            }
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if(document.activeElement === chatInput) return; 
+
+            if(e.code === 'Enter' && juegoActivo) {
+                e.preventDefault();
+                chatAbierto = true; 
+                document.exitPointerLock();
+                setTimeout(() => chatInput.focus(), 50);
+                return;
+            }
+
+            keys[e.code] = true;
+            if(e.key === '1') { currentType = 'box'; document.getElementById('hud').innerText = "SELECCIÓN: CAJA"; }
+            if(e.key === '2') { currentType = 'sphere'; document.getElementById('hud').innerText = "SELECCIÓN: ESFERA"; }
+            if(e.key === '3') { currentType = 'cone'; document.getElementById('hud').innerText = "SELECCIÓN: CONO"; }
+            if(e.key === '4') { currentType = 'torus'; document.getElementById('hud').innerText = "SELECCIÓN: TOROIDE"; }
+            if(e.code === 'KeyT' && juegoActivo) requestToggleTimeStop();
+            if(e.code === 'KeyR' && juegoActivo) clearMap();
+        });
+
+        window.addEventListener('keyup', (e) => {
+            keys[e.code] = false;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if(juegoActivo && document.pointerLockElement === renderer.domElement) {
+                camera.rotation.y -= e.movementX * 0.002;
+                camera.rotation.x -= e.movementY * 0.002;
+            }
+        });
+
+        const meshes = [], bodies = [], deathTimes = [];
+        const LIFE_SPAN = 600;
+
+        function spawn(type, shoot = false, customPos = null, customDir = null, deRival = false) {
+            let dir = new THREE.Vector3();
+            if (customDir) dir.copy(customDir);
+            else camera.getWorldDirection(dir);
+
+            let pos = new THREE.Vector3();
+            if (customPos) {
+                pos.copy(customPos);
+            } else {
+                pos = shoot ? camera.position.clone().add(dir.clone().multiplyScalar(2)) : camera.position.clone().add(new THREE.Vector3(0, 10, 0));
+            }
+            
+            let geo, shape;
+            if(type === 'box') { geo = new THREE.BoxGeometry(1.2, 1.2, 1.2); shape = new CANNON.Box(new CANNON.Vec3(0.6, 0.6, 0.6)); }
+            else if(type === 'sphere') { geo = new THREE.SphereGeometry(0.7, 16, 16); shape = new CANNON.Sphere(0.7); }
+            else if(type === 'cone') { geo = new THREE.ConeGeometry(0.6, 1.3, 16); shape = new CANNON.Cylinder(0.01, 0.6, 1.3, 16); }
+            else { geo = new THREE.TorusGeometry(0.5, 0.2, 8, 24); shape = new CANNON.Sphere(0.6); }
+
+            const colorObj = deRival ? 0x9c27b0 : Math.random() * 0xffffff;
+            const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: colorObj, transparent: true }));
+            mesh.castShadow = true; mesh.receiveShadow = true;
+            scene.add(mesh);
+            
+            const body = new CANNON.Body({ mass: 10, shape: shape, material: objMat });
+            body.position.copy(pos);
+
+            const launchVel = new CANNON.Vec3(dir.x*55, dir.y*55, dir.z*55);
+            if(shoot) {
+                if(timeStopped) { body.storedVel = launchVel; body.velocity.set(0,0,0); } 
+                else { body.velocity.copy(launchVel); }
+            }
+
+            body.addEventListener('collide', (e) => {
+                const impact = e.contact.getImpactVelocityAlongNormal();
+                if(impact > 3) playHitSound(body.position, impact/15);
+            });
+            
+            world.addBody(body); meshes.push(mesh); bodies.push(body);
+            deathTimes.push(clock.getElapsedTime() + LIFE_SPAN);
+
+            if (!deRival && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({
+                    type: 'spawn_objeto',
+                    objType: type,
+                    pos: { x: pos.x, y: pos.y, z: pos.z },
+                    dir: { x: dir.x, y: dir.y, z: dir.z },
+                    shoot: shoot
+                }));
+            }
+        }
+
+        let heldBody = null;
+        window.addEventListener('keydown', (e) => {
+            if(!juegoActivo || document.activeElement === chatInput) return;
+            if(e.code === 'KeyE') {
+                if(heldBody) {
+                    const dir = new THREE.Vector3(); camera.getWorldDirection(dir);
+                    const force = new CANNON.Vec3(dir.x * 55, dir.y * 55, dir.z * 55);
+                    if(timeStopped) { heldBody.storedVel = force; heldBody = null; } 
+                    else { heldBody.velocity.copy(force); heldBody = null; }
+                } else { grabObject(); }
+            }
+            if(e.code === 'KeyQ') {
+                if(heldBody) { heldBody.velocity.set(0, -5, 0); heldBody = null; } 
+                else { grabObject(); }
+            }
+        });
+
+        function grabObject() {
+            const ray = new THREE.Raycaster();
+            ray.setFromCamera({x:0, y:0}, camera);
+            const hits = ray.intersectObjects(meshes);
+            if(hits.length > 0 && hits[0].distance < 12) {
+                heldBody = bodies[meshes.indexOf(hits[0].object)];
+            }
+        }
+
+        socket.onmessage = (event) => {
+            const msg = JSON.parse(event.data);
+            
+            if (msg.type === 'init') {
+                miId = msg.id;
+                agregarTextoAlChat(null, "⚡ Conexión establecida con el servidor.", true);
+            }
+
+            if (msg.type === 'chat_mensaje') {
+                agregarTextoAlChat(msg.nombre, msg.texto, false);
+            }
+
+            if (msg.type === 'render_rival') {
+                if (!rivales3D[msg.id]) {
+                    const rivalGeo = new THREE.CylinderGeometry(0.8, 0.8, 3, 16);
+                    const rivalMat = new THREE.MeshStandardMaterial({ color: 0x00ffff, emissive: 0x0033aa });
+                    const rivalMesh = new THREE.Mesh(rivalGeo, rivalMat);
+                    rivalMesh.castShadow = true;
+                    scene.add(rivalMesh);
+
+                    const rivalBody = new CANNON.Body({
+                        mass: 0, 
+                        shape: new CANNON.Cylinder(0.8, 0.8, 3, 16),
+                        material: objMat
+                    });
+                    world.addBody(rivalBody);
+                    
+                    const label = document.createElement('div');
+                    label.className = 'etiqueta-rival';
+                    label.id = 'label-' + msg.id;
+                    label.innerText = msg.nombre; 
+                    document.getElementById('labels-container').appendChild(label);
+
+                    rivales3D[msg.id] = { mesh: rivalMesh, body: rivalBody, labelEl: label };
+                }
+                
+                rivales3D[msg.id].mesh.position.set(msg.pos.x, msg.pos.y - 1, msg.pos.z);
+                rivales3D[msg.id].body.position.set(msg.pos.x, msg.pos.y - 1, msg.pos.z); 
+            }
+
+            if (msg.type === 'spawn_rival') {
+                spawn(msg.objType, msg.shoot, new THREE.Vector3(msg.pos.x, msg.pos.y, msg.pos.z), new THREE.Vector3(msg.dir.x, msg.dir.y, msg.dir.z), true);
+            }
+
+            if (msg.type === 'ts_global_activado') {
+                timeStopped = true;
+                quienCongelo = msg.activadoPor;
+                tsCounter = msg.duracionMax;
+                playTsSound(true);
+                document.body.classList.add('ts-active');
+                sunLight.intensity = 0.2;
+                document.getElementById('ts-timer').style.display = 'block';
+                document.getElementById('ts-banner').innerText = quienCongelo === miId ? "⚡ ¡HAS DETENIDO EL TIEMPO! ⚡" : `⏳ ${msg.nombreActivador} DETUVO EL TIEMPO ⏳`;
+                document.getElementById('ts-banner').style.display = 'block';
+            }
+
+            if (msg.type === 'ts_global_desactivado') {
+                playTsSound(false);
+                timeStopped = false;
+                quienCongelo = null;
+                document.body.classList.remove('ts-active');
+                document.getElementById('ts-timer').style.display = 'none';
+                document.getElementById('ts-banner').style.display = 'none';
+                sunLight.intensity = 1.4;
+
+                // Aplicar cooldown de 2 minutos (120 segundos)
+                tsCooldownRestante = 120;
+
+                bodies.forEach(b => {
+                    if(b.storedVel) {
+                        b.velocity.copy(b.storedVel);
+                        b.angularVelocity.copy(b.storedAng || new CANNON.Vec3());
+                        b.storedVel = null;
+                    }
+                });
+            }
+
+            if (msg.type === 'desconexion') {
+                if (rivales3D[msg.id]) {
+                    scene.remove(rivales3D[msg.id].mesh);
+                    world.removeBody(rivales3D[msg.id].body); 
+                    rivales3D[msg.id].labelEl.remove(); 
+                    delete rivales3D[msg.id];
+                }
+            }
+        };
+
+        let velY = 0;
+        function animate() {
+            animateRivalLabels();
+            requestAnimationFrame(animate);
+            const dt = Math.min(clock.getDelta(), 0.1);
+            const elapsedTime = clock.getElapsedTime();
+
+            if(juegoActivo) {
+                // Reducir el cooldown con el tiempo delta de renderizado
+                if (tsCooldownRestante > 0) {
+                    tsCooldownRestante -= dt;
+                }
+
+                if(timeStopped) {
+                    tsCounter -= dt;
+                    document.getElementById('ts-timer').innerText = Math.max(0, tsCounter).toFixed(2);
+                    if(tsCounter <= 0 && quienCongelo === miId) {
+                        if (socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify({ type: 'desactivar_ts' }));
+                    }
+                }
+
+                const speed = 25 * dt;
+                camera.rotation.x = Math.max(-Math.PI/2.3, Math.min(Math.PI/2.3, camera.rotation.x));
+
+                if(document.activeElement !== chatInput) {
+                    if(keys['KeyW']) {
+                        const zMove = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
+                        zMove.y = 0; zMove.normalize(); camera.position.add(zMove.multiplyScalar(speed));
+                    }
+                    if(keys['KeyS']) {
+                        const zMove = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
+                        zMove.y = 0; zMove.normalize(); camera.position.add(zMove.multiplyScalar(-speed));
+                    }
+                    if(keys['KeyA']) {
+                        const xMove = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion);
+                        xMove.y = 0; xMove.normalize(); camera.position.add(xMove.multiplyScalar(-speed));
+                    }
+                    if(keys['KeyD']) {
+                        const xMove = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion);
+                        xMove.y = 0; xMove.normalize(); camera.position.add(xMove.multiplyScalar(speed));
+                    }
+
+                    if (keys['Space']) {
+                        camera.position.y += 22 * dt;
+                        velY = 0; 
+                    } else {
+                        velY -= 38 * dt;
+                        camera.position.y += velY * dt;
+                        if(camera.position.y < 2.5) { camera.position.y = 2.5; velY = 0; }
+                    }
+                } else {
+                    velY -= 38 * dt;
+                    camera.position.y += velY * dt;
+                    if(camera.position.y < 2.5) { camera.position.y = 2.5; velY = 0; }
+                }
+                
+                playerBody.position.copy(camera.position);
+
+                if (socket.readyState === WebSocket.OPEN && miId) {
+                    socket.send(JSON.stringify({
+                        type: 'mover',
+                        pos: { x: camera.position.x, y: camera.position.y, z: camera.position.z }
+                    }));
+                }
+
+                if(!timeStopped) {
+                    world.fixedStep();
+                } else {
+                    bodies.forEach(b => {
+                        if(!b.storedVel && (b.velocity.length() > 0 || b.angularVelocity.length() > 0)) {
+                            b.storedVel = b.velocity.clone();
+                            b.storedAng = b.angularVelocity.clone();
+                        }
+                        b.velocity.set(0,0,0); b.angularVelocity.set(0,0,0);
+                    });
+                }
+
+                for(let i = meshes.length - 1; i >= 0; i--) {
+                    meshes[i].position.copy(bodies[i].position);
+                    meshes[i].quaternion.copy(bodies[i].quaternion);
+                    const timeLeft = deathTimes[i] - elapsedTime;
+                    if(bodies[i].position.y < -60 || timeLeft <= 0) {
+                        scene.remove(meshes[i]); world.removeBody(bodies[i]);
+                        if(heldBody === bodies[i]) heldBody = null;
+                        meshes.splice(i, 1); bodies.splice(i, 1); deathTimes.splice(i, 1);
+                    } else if(timeLeft < 5) {
+                        meshes[i].material.opacity = Math.max(0, timeLeft / 5);
+                    }
+                }
+
+                if(heldBody) {
+                    const dir = new THREE.Vector3(); camera.getWorldDirection(dir);
+                    const targetPos = camera.position.clone().add(dir.multiplyScalar(5));
+                    heldBody.position.set(targetPos.x, targetPos.y, targetPos.z);
+                    heldBody.velocity.set(0,0,0); heldBody.angularVelocity.set(0,0,0);
+                }
+            }
+
+            function animateRivalLabels() {
+                const tempV = new THREE.Vector3();
+                for (let id in rivales3D) {
+                    const rival = rivales3D[id];
+                    tempV.copy(rival.mesh.position);
+                    tempV.y += 1.8;
+                    tempV.project(camera);
+                    if (tempV.z > 1 || menuOverlay.style.display === 'flex' || document.getElementById('device-overlay').style.display === 'flex') {
+                        rival.labelEl.style.display = 'none';
+                        continue;
+                    }
+                    const x = (tempV.x * .5 + .5) * window.innerWidth;
+                    const y = (tempV.y * -.5 + .5) * window.innerHeight;
+                    rival.labelEl.style.left = `${x}px`;
+                    rival.labelEl.style.top = `${y}px`;
+                    rival.labelEl.style.display = 'block';
+                }
+            }
+
+            if(window.sunMesh) window.sunMesh.rotation.y += 0.002;
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
